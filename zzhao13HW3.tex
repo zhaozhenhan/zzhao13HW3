@@ -32,8 +32,9 @@ extendedchars=true
 
 \renewcommand{\thefootnote}{\fnsymbol{footnote}}
 
+\usepackage{Sweave}
 \begin{document}
-\SweaveOpts{concordance=TRUE}
+\input{zzhao13HW3-concordance}
 
 
 
@@ -121,9 +122,7 @@ R CMD pdflatex yourfilename.tex
         \begin{itemize}
             \item Use 
 \begin{lstlisting}
-<<echo=false, results=hide, fig=true>>=
-#Your R codes goes here
-@
+\includegraphics{zzhao13HW3-001}
 \end{lstlisting}
             \item Make sure to label the horizontal axis, the vertical axis
                 and give the main title, and give different color for $A$ and
@@ -140,142 +139,11 @@ points(xydataB,cex=,pch=,cex=,color='')
     \item[(b)] \verb+[COMMIT]+  Supplement your calculation using R/Sweave
         \begin{itemize}
             \item computations need to be done before using them in the text
-                using \verb+\Sexpr{}+ or concurrently
+                using \verb++ or concurrently
 \begin{lstlisting}
-<<echo=false,result=verbatim,fig=false>>=
-A = matrix(c(1,0,0,1),nrow=2,byrow=TRUE)
-retval = det(A)
-@
-The determinant is \Sexpr{det(A)} or equivalently \Sexpr{retval}.
+The determinant is 1 or equivalently 1.
 \end{lstlisting}
         \end{itemize}
     \item[(c)] \verb+[COMMIT]+   directly use the code and output from R/Sweave, but make sure
         to explain your answers
 \begin{lstlisting}
-<<echo=true,result=verbatim,fig=false>>=
-Your R code goes here
-@
-\end{lstlisting}
-\end{itemize}
-
-\paragraph{Solution to 7.18}
-
-\begin{itemize}
-\item[(a)]
-A=matrix(c(1, 2, 3,
-           2, 3, 4,
-           3, 4, 5,
-           4, 5, 6), nrow = 4, byrow=TRUE)
-B=matrix(c(1, 2, 3,
-           2, 4, 6,
-           3, 6, 9,
-           4, 8, 12), nrow = 4, byrow=TRUE)
-xydataA=A[,1:2]
-xydataB=B[,1:2]
-plot(xydataA,xlab='1st column',ylab='2nd column',main='Point Plot of A and B',col='black',cex=1,pch=20)
-points(xydataB,cex=1,pch=20,col='blue')
-@
-\begin{lstlisting}[caption=R Codes for A B plot, label=code:plot]
-A=matrix(c(1, 2, 3,
-           2, 3, 4,
-           3, 4, 5,
-           4, 5, 6), nrow = 4, byrow=TRUE)
-B=matrix(c(1, 2, 3,
-           2, 4, 6,
-           3, 6, 9,
-           4, 8, 12), nrow = 4, byrow=TRUE)
-xydataA=A[,1:2]
-xydataB=B[,1:2]
-plot(xydataA,xlab='1st column',ylab='2nd column',main='Point Plot of A and B',col='black',cex=1,pch=20)
-points(xydataB,cex=1,pch=20,col='blue')
-\end{lstlisting}
-
-\item[(b)]
-<<echo=false,result=verbatim,fig=false>>=
-rankA=qr(A)$rank
-rankB=qr(B)$rank
-@
-The rank of $A$ is \Sexpr{rankA} and the rank of $B$ is \Sexpr{rankB}.As creating the second and third colunm of $A$ from the first column cannot be done by combining column 1 alone, the rank is not 1. 
-
-\item[(c)]
-<<echo=TRUE,results=verbatim,fig=FALSE>>=
-a=cbind(A[1:2,3])
-A22=A[1:2,1:2]
-x=solve(A22, a)
-@
-For matrix $B$, it is easy because its rank is \Sexpr{rankB}, the second column
-is 2 times the first columb, the third is 3 times the first columb.
-\end{itemize}
-
-\paragraph{Ex 7.24}
-\begin{itemize}
-    \item \verb+[COMMIT]+ use \verb+lstlisting+ to list your R code
-    \item \verb+[COMMIT]+ use R/Sweave for computation, but do not use the built-in \verb+dist+
-        function
-\begin{lstlisting}
-<<echo=true,result=verbatim,fig=false>>=
-#Your R codes go here
-@
-\end{lstlisting}
-    \item \verb+[COMMIT]+ use R/Sweave for computation, and this time, do use the built-in \verb+dist+
-        function for comparison
-\begin{lstlisting}
-<<echo=true,result=verbatim,fig=false>>=
-#Your R codes go here
-@
-\end{lstlisting}
-    \item \verb+[COMMIT]+ make sure to explain your computation, e.g., compare the two
-        computations
-\end{itemize}
-
-\paragraph{Solution to 7.18}
-
-\begin{lstlisting}[caption=R codes for Distance Squared, label=code:distance]
-X=A %*% t(A)
-c=cbind(diag(X))
-ones=cbind(c(1,1,1,1))
-Dsqr=c %*% t(ones)+ones %*% t(c)-2*X
-D <- sqrt(Dsqr)
-
-X <- A %*% t(A)
-c <- cbind(diag(X))
-ones <- cbind(c(1,1,1,1))
-Dsqr <- c %*% t(ones)+ones %*% t(c)-2*X
-D <- sqrt(Dsqr)
-\end{lstlisting}
-
-Without Built-in Dist:
-<<echo=TRUE,results=verbatim,fig=FALSE>>=
-X <- A %*% t(A)
-c <- cbind(diag(X))
-ones <- cbind(c(1,1,1,1))
-Dsqr <- c %*% t(ones)+ones %*% t(c)-2*X
-D <- sqrt(Dsqr)
-@
-
-The distance matrix is
-
-$$D=
-\begin{pmatrix}
-\Sexpr{D[1,1]}&\Sexpr{D[1,2]}&\Sexpr{D[1,3]}&\Sexpr{D[1,4]}\\
-\Sexpr{D[2,1]}&\Sexpr{D[2,2]}&\Sexpr{D[2,3]}&\Sexpr{D[2,4]}\\
-\Sexpr{D[3,1]}&\Sexpr{D[3,2]}&\Sexpr{D[3,3]}&\Sexpr{D[3,4]}\\
-\Sexpr{D[4,1]}&\Sexpr{D[4,2]}&\Sexpr{D[4,3]}&\Sexpr{D[4,4]}
-\end{pmatrix}$$
-
-This result is computed using the formula (7.5) in the book.
-
-
-With Built-in Dist:
-<<echo=TRUE,results=verbatim,fig=FALSE>>=
-dis <- dist(A)
-distance <- as.matrix(dis)
-@
-
-$$distance=
-\begin{pmatrix}
-\Sexpr{distance[1,1]}&\Sexpr{distance[1,2]}&\Sexpr{distance[1,3]}&\Sexpr{distance[1,4]}\\
-\Sexpr{distance[2,1]}&\Sexpr{distance[2,2]}&\Sexpr{distance[2,3]}&\Sexpr{distance[2,4]}\\
-\Sexpr{distance[3,1]}&\Sexpr{distance[3,2]}&\Sexpr{distance[3,3]}&\Sexpr{distance[3,4]}\\
-\Sexpr{distance[4,1]}&\Sexpr{distance[4,2]}&\Sexpr{distance[4,3]}&\Sexpr{distance[4,4]}
-\end{pmatrix}$$
