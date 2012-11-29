@@ -153,7 +153,7 @@ The determinant is \Sexpr{det(A)} or equivalently \Sexpr{retval}.
         to explain your answers
 \begin{lstlisting}
 <<echo=true,result=verbatim,fig=false>>=
-Your R code goes here
+#Your R code goes here
 @
 \end{lstlisting}
 \end{itemize}
@@ -191,7 +191,6 @@ points(xydataB,cex=1,pch=20,col='blue')
 \end{lstlisting}
 
 \item[(b)]
-<<echo=false,result=verbatim,fig=false>>=
 rankA=qr(A)$rank
 rankB=qr(B)$rank
 @
@@ -231,30 +230,29 @@ is 2 times the first columb, the third is 3 times the first columb.
 \paragraph{Solution to 7.18}
 
 \begin{lstlisting}[caption=R codes for Distance Squared, label=code:distance]
-X=A %*% t(A)
+X=A%*%t(A)
 c=cbind(diag(X))
-ones=cbind(c(1,1,1,1))
-Dsqr=c %*% t(ones)+ones %*% t(c)-2*X
-D <- sqrt(Dsqr)
-
-X <- A %*% t(A)
-c <- cbind(diag(X))
-ones <- cbind(c(1,1,1,1))
-Dsqr <- c %*% t(ones)+ones %*% t(c)-2*X
-D <- sqrt(Dsqr)
+one=cbind(c(1,1,1,1))
+Dsqr=c%*%t(one)+one%*%t(c)-2*X
+D=sqrt(Dsqr)
 \end{lstlisting}
 
 Without Built-in Dist:
 <<echo=TRUE,results=verbatim,fig=FALSE>>=
-X <- A %*% t(A)
-c <- cbind(diag(X))
-ones <- cbind(c(1,1,1,1))
-Dsqr <- c %*% t(ones)+ones %*% t(c)-2*X
-D <- sqrt(Dsqr)
+X=A%*%t(A)
+c=cbind(diag(X))
+one=cbind(c(1,1,1,1))
+Dsqr=c%*%t(one)+one%*%t(c)-2*X
+D=sqrt(Dsqr)
+@
+
+With Built-in Dist:
+<<echo=TRUE,results=verbatim,fig=FALSE>>=
+dis=dist(A)
+distance=as.matrix(dis)
 @
 
 The distance matrix is
-
 $$D=
 \begin{pmatrix}
 \Sexpr{D[1,1]}&\Sexpr{D[1,2]}&\Sexpr{D[1,3]}&\Sexpr{D[1,4]}\\
@@ -263,19 +261,4 @@ $$D=
 \Sexpr{D[4,1]}&\Sexpr{D[4,2]}&\Sexpr{D[4,3]}&\Sexpr{D[4,4]}
 \end{pmatrix}$$
 
-This result is computed using the formula (7.5) in the book.
 
-
-With Built-in Dist:
-<<echo=TRUE,results=verbatim,fig=FALSE>>=
-dis <- dist(A)
-distance <- as.matrix(dis)
-@
-
-$$distance=
-\begin{pmatrix}
-\Sexpr{distance[1,1]}&\Sexpr{distance[1,2]}&\Sexpr{distance[1,3]}&\Sexpr{distance[1,4]}\\
-\Sexpr{distance[2,1]}&\Sexpr{distance[2,2]}&\Sexpr{distance[2,3]}&\Sexpr{distance[2,4]}\\
-\Sexpr{distance[3,1]}&\Sexpr{distance[3,2]}&\Sexpr{distance[3,3]}&\Sexpr{distance[3,4]}\\
-\Sexpr{distance[4,1]}&\Sexpr{distance[4,2]}&\Sexpr{distance[4,3]}&\Sexpr{distance[4,4]}
-\end{pmatrix}$$

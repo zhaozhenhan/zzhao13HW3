@@ -147,3 +147,45 @@ The determinant is 1 or equivalently 1.
     \item[(c)] \verb+[COMMIT]+   directly use the code and output from R/Sweave, but make sure
         to explain your answers
 \begin{lstlisting}
+\begin{Schunk}
+\begin{Sinput}
+> #Your R code goes here
+\end{Sinput}
+\end{Schunk}
+\end{lstlisting}
+\end{itemize}
+
+\paragraph{Solution to 7.18}
+
+\begin{itemize}
+\item[(a)]
+A=matrix(c(1, 2, 3,
+           2, 3, 4,
+           3, 4, 5,
+           4, 5, 6), nrow = 4, byrow=TRUE)
+B=matrix(c(1, 2, 3,
+           2, 4, 6,
+           3, 6, 9,
+           4, 8, 12), nrow = 4, byrow=TRUE)
+xydataA=A[,1:2]
+xydataB=B[,1:2]
+plot(xydataA,xlab='1st column',ylab='2nd column',main='Point Plot of A and B',col='black',cex=1,pch=20)
+points(xydataB,cex=1,pch=20,col='blue')
+\begin{lstlisting}[caption=R Codes for A B plot, label=code:plot]
+A=matrix(c(1, 2, 3,
+           2, 3, 4,
+           3, 4, 5,
+           4, 5, 6), nrow = 4, byrow=TRUE)
+B=matrix(c(1, 2, 3,
+           2, 4, 6,
+           3, 6, 9,
+           4, 8, 12), nrow = 4, byrow=TRUE)
+xydataA=A[,1:2]
+xydataB=B[,1:2]
+plot(xydataA,xlab='1st column',ylab='2nd column',main='Point Plot of A and B',col='black',cex=1,pch=20)
+points(xydataB,cex=1,pch=20,col='blue')
+\end{lstlisting}
+
+\item[(b)]
+rankA=qr(A)$rank
+rankB=qr(B)$rank
