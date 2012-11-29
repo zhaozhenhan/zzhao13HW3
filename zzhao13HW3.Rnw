@@ -379,28 +379,23 @@ k=LargeK
 M=U[,1:k,drop=FALSE] %*% S[1:k,1:k,drop=FALSE] %*% t(V[,1:k,drop=FALSE])
 image(M,col=gray.colors(k))
 @
-\caption{very good performance on k = $\Sexpr{largeK}$}
+\caption{very good performance on k=$\Sexpr{largeK}$}
 \label{fig:matlabclownLargeK}
 \end{figure}
 
-
-\newpage
-\subparagraph{(b)}
+\vskip 3in
+\item[(b)]
 
 <<echo=FALSE,results=hide>>=
-s <- diag(S)
-comprate <- cumsum(s)/sum(s)
+s=diag(S)
+crate=cumsum(s)/sum(s)
 @
 
-For k = $\Sexpr{tinyK}$, $\Sexpr{smallK}$, $\Sexpr{mediumK}$,
-$\Sexpr{largeK}$, the corresponding compression rates are
-\Sexpr{comprate[tinyK]}, \Sexpr{comprate[smallK]},
-\Sexpr{comprate[mediumK]}, \Sexpr{comprate[largeK]}. These are the
-values from diagnal matrix S.
+The compression rates are\Sexpr{comprate[tinyK]}, \Sexpr{comprate[smallK]},\Sexpr{comprate[mediumK]}, \Sexpr{comprate[largeK]} for k=$\Sexpr{tinyK}$, $\Sexpr{smallK}$, $\Sexpr{mediumK}$,$\Sexpr{largeK}$.
+\end{itemize}
 
 
-
-\vskip0.25in
+\vskip in
 \begin{center}
     \textbf{Problems from Chapter 4: Multidimensional Scaling}
 \end{center}
@@ -445,3 +440,135 @@ values from diagnal matrix S.
 \caption{An extension of an example from the TikZ \& PGF manual \cite{tikzManual2012-11-04}}
 \label{fig:examplefrommanual}
 \end{figure}
+
+\paragraph{Solution to 4.1}
+
+\begin{figure}[h!]
+  \centering
+  \begin{tikzpicture}
+  \foreach \x in {1,2,...,10}
+    \foreach \y in {1}
+    {
+      \draw (\x,\y) +(-.5,-.5) rectangle ++(.5,.5);
+      \draw (\x,\y) node{\footnotesize $(\x,\y)$};
+    }
+  \end{tikzpicture}
+  \caption{Ten Objects on a Line}
+  \label{fig:tenobjects}
+\end{figure}
+
+
+\begin{lstlisting}[caption=R codes for CMD and D Matrix, label={code:dissimilarity}]
+
+S=matrix(rep(1,51*51),nrow=51,byrow=TRUE)
+for (i in 1:51){
+  for (j in 1:51){
+    if(i == j) S[i,j]=9
+    else if(abs(i-j)>=1 & abs(i-j)<=3) S[i,j]=8
+    else if(abs(i-j)>=4 & abs(i-j)<=6) S[i,j]=7
+    else if(abs(i-j)>=7 & abs(i-j)<=9) S[i,j]=6
+    else if(abs(i-j)>=10 & abs(i-j)<=12) S[i,j]=5
+    else if(abs(i-j)>=13 & abs(i-j)<=15) S[i,j]=4
+    else if(abs(i-j)>=16 & abs(i-j)<=18) S[i,j]=3
+    else if(abs(i-j)>=19 & abs(i-j)<=21) S[i,j]=2
+    else if(abs(i-j)>=22 & abs(i-j)<=24) S[i,j]=1
+    else S[i,j]=0
+  }
+}
+
+dm=matrix(rep(1,51*51),nrow=51,byrow=TRUE)
+for (i in 1:51){
+  for (j in 1:51){
+    dm[i,j]=sqrt(S[i,i]+S[j,j]-2*S[i,j])
+  }
+}
+X_cmd=cmdscale(dm)
+plot(X_cmd,col=heat.colors(51),pch=5)
+@
+\end{lstlisting}
+
+<<echo=FALSE,results=hide,fig=TRUE>>=
+S=matrix(rep(1,51*51),nrow=51,byrow=TRUE)
+for (i in 1:51){
+  for (j in 1:51){
+    if(i == j) S[i,j]=9
+    else if(abs(i-j)>=1 & abs(i-j)<=3) S[i,j]=8
+    else if(abs(i-j)>=4 & abs(i-j)<=6) S[i,j]=7
+    else if(abs(i-j)>=7 & abs(i-j)<=9) S[i,j]=6
+    else if(abs(i-j)>=10 & abs(i-j)<=12) S[i,j]=5
+    else if(abs(i-j)>=13 & abs(i-j)<=15) S[i,j]=4
+    else if(abs(i-j)>=16 & abs(i-j)<=18) S[i,j]=3
+    else if(abs(i-j)>=19 & abs(i-j)<=21) S[i,j]=2
+    else if(abs(i-j)>=22 & abs(i-j)<=24) S[i,j]=1
+    else S[i,j]=0
+  }
+}
+
+dm=matrix(rep(1,51*51),nrow=51,byrow=TRUE)
+for (i in 1:51){
+  for (j in 1:51){
+    delta[i,j]=sqrt(S[i,i]+S[j,j]-2*S[i,j])
+  }
+}
+X_cmd=cmdscale(dm)
+plot(X_cmd,col=heat.colors(51),pch=5)
+@
+From the plot, the points come to form an almost circle, adjacent points share the similar coordinates, as the coordinates get larger, the respective points turn from red to yellow.
+
+\paragraph{Ex 4.2}
+\begin{itemize}
+    \item \verb+[COMMIT]+ list your R code using \verb+lstlisting+ 
+    \item \verb+[COMMIT]+ demonstrate that your function is ``functioning'' by way of R/Sweave
+\end{itemize}
+
+
+\paragraph{solution to 4.2}
+
+\begin{lstlisting}
+f=function(x) {
+  a=t(t(x) / colSums(x))
+  ret=sqrt(colSums((a[,rep(1:ncol(x), ncol(x))]- a[, rep(1:nol(x),rep(ncol(x), ncol(x)))])^2* sum(x)/rowSums(x)))
+  matrix(ret, ncol = ncol(x))
+}
+\end{lstlisting}
+
+\paragraph{Ex 4.3}
+\begin{itemize}
+    \item \verb+[COMMIT]+ list your R code using \verb+lstlisting+ 
+    \item \verb+[COMMIT]+ load the data
+        (\verb+require(MVA);data(gardenflowers)+) and compute using R/Sweave
+    \item \verb+[COMMIT]+ include a plot of (relative) positions using R/Sweave
+    \item \verb+[COMMIT]+ allocate at least a quarter page of \emph{text} explaining the result
+\end{itemize}
+
+\paragraph{Solution to 4.3}
+
+\begin{lstlisting}[caption=R codes for Garden Flowers Comparison, label={code:gardenflower}]
+
+require(MVA)
+data(gardenflowers)
+flowersmds=cmdscale(gardenflowers,k=17,eig=TRUE)
+x=flowersmds$points[,1]
+y=flowersmds$points[,2]
+
+plot(x, y, xlab = "Column 1", ylab = "Column 2", xlim = range(x)*1.5, type = "n")
+text(x, y, labels = colnames(as.matrix(gardenflowers)),cex = 0.5)
+\end{lstlisting}
+
+<<echo=FALSE,results=hide,fig=TRUE>>=
+require(MVA)
+data(gardenflowers)
+flowersmds=cmdscale(gardenflowers,k=17,eig=TRUE)
+x=flowersmds$points[,1]
+y=flowersmds$points[,2]
+plot(x, y, xlab = "Column 1", ylab = "Column 2",xlim = range(x)*1.5, type = "n")
+text(x, y, labels = colnames(as.matrix(gardenflowers)),cex = 0.5)
+@
+
+From the plot, we can conclude that the more similar the flowers are, the closer they are.The plot distinguishes a few groups of flowers. Scotch rose, Red rose and Broom fall into one group as they stick close;Pink carnation, Peony and Forget-me-not fall into another group as they flock together; other groups like camellia, Fuchsia, Begonia and Gladiolus, Dahlla,Geranium, etc.Overall, similar flowers fall into one group, the plot does a good job demonstrating the dissimilarity of flowers.
+
+\bibliographystyle{plain}
+\nocite{*}
+\bibliography{biblio}
+
+\end{document}
