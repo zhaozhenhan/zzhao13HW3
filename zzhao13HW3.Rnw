@@ -261,4 +261,187 @@ $$D=
 \Sexpr{D[4,1]}&\Sexpr{D[4,2]}&\Sexpr{D[4,3]}&\Sexpr{D[4,4]}
 \end{pmatrix}$$
 
+Without Built-in Dist Function, We use the formula 7.5 in the book to calculate the distance matrix; with Build-in Dist Function, we directly calculate the distance matrix.
 
+\paragraph{Ex 7.30}
+Omit (c), (d) and (e). 
+The necessary data is saved in \verb+matlabclown.RData+ 
+and can be found from the course git folder.
+The followings are the equivalent R version:
+\begin{lstlisting}
+load('matlabclown.RData')
+image(X) # omit this in your Sweave code
+svdX = svd(X)
+U = svdX$u
+S = diag(svdX$d)
+V = svdX$v
+k = 10
+M = U[,1:k,drop=FALSE] %*% S[1:k,1:k,drop=FALSE] %*% t(V[,1:k,drop=FALSE])
+image(M) # omit this in your Sweave code
+image(M,col=gray.colors(k))
+\end{lstlisting}
+\begin{itemize}
+    \item[(a)] \verb+[COMMIT]+ choose a small, a medium and a large value for $k$ 
+         \begin{itemize}
+             \item for each $k$, 
+                 \begin{itemize}
+             \item do \verb+[COMMIT]+ 
+             \item your performance evaluation is to be included as a caption,
+            and change \verb+tinyK+, \verb+width+ and \verb+height+ accordingly
+\begin{lstlisting}
+\begin{figure}
+    \centering
+<<echo=true,result=verbatim,fig=true,width=5,height=5>>=
+tinyK = 1
+#smallK = 
+#mediumK = 
+#largeK = 
+#Your R codes go here
+@
+\caption{<YOUR PERFORMANCE EVALUATION> on $\Sexpr{tinyK}$}
+    \label{fig:matlabclownKaNumber}
+\end{figure}
+\end{lstlisting}
+                 \end{itemize}
+         \end{itemize}
+    \item[(b)] 
+        \begin{itemize}
+            \item \verb+[COMMIT]+ code up all your computation using R/Sweave
+                before starting to type your explanation
+\begin{lstlisting}
+<<echo=false,result=hide>>=
+#Your R codes go here
+@
+\end{lstlisting}
+            \item \verb+[COMMIT]+ write your explanation referring to the
+                numbers computed in the previous step, using
+                \verb+\Sexpr{}+
+        \end{itemize}
+\end{itemize}
+
+
+\paragraph{Solution to 7.30}
+\begin{itemize}
+    \item[(a)]
+    \begin{figure}
+    \centering
+<<echo=TRUE,results=verbatim,fig=TRUE,width=5,height=5>>=
+tinyK=1
+smallK=10
+mediumK=75
+largeK=150
+load("C:/Users/George/zzhao13HW3.git/matlabclown.RData")
+svdX=svd(X)
+U=svdX$u
+S=diag(svdX$d)
+V=svdX$v
+k=smallK
+M=U[,1:k,drop=FALSE] %*% S[1:k,1:k,drop=FALSE] %*% t(V[,1:k,drop=FALSE])
+image(M,col=gray.colors(k))
+@
+\caption{Poor performance on k=$\Sexpr{smallK}$}
+    \label{fig:matlabclownsmallK}
+\end{figure}
+
+\begin{figure}
+  \centering
+<<echo=TRUE,results=verbatim,fig=TRUE,width=5,height=5>>=
+tinyK=1
+smallK=10
+mediumK=75
+largeK=150
+load("C:/Users/George/zzhao13HW3.git/matlabclown.RData")
+svdX=svd(X)
+U=svdX$u
+S=diag(svdX$d)
+V=svdX$v
+k=mediumK
+M=U[,1:k,drop=FALSE] %*% S[1:k,1:k,drop=FALSE] %*% t(V[,1:k,drop=FALSE])
+image(M,col=gray.colors(k))
+@
+\caption{good performance on k=$\Sexpr{mediumK}$}
+\label{fig:matlabclownmediumK}
+\end{figure}
+
+\begin{figure}
+  \centering
+<<echo=TRUE,results=verbatim,fig=TRUE,width=5,height=5>>=
+tinyK=1
+smallK=10
+mediumK=75
+largeK=150
+load("matlabclown.RData")
+svdX=svd(X)
+U=svdX$u
+S=diag(svdX$d)
+V=svdX$v
+k=LargeK
+M=U[,1:k,drop=FALSE] %*% S[1:k,1:k,drop=FALSE] %*% t(V[,1:k,drop=FALSE])
+image(M,col=gray.colors(k))
+@
+\caption{very good performance on k = $\Sexpr{largeK}$}
+\label{fig:matlabclownLargeK}
+\end{figure}
+
+
+\newpage
+\subparagraph{(b)}
+
+<<echo=FALSE,results=hide>>=
+s <- diag(S)
+comprate <- cumsum(s)/sum(s)
+@
+
+For k = $\Sexpr{tinyK}$, $\Sexpr{smallK}$, $\Sexpr{mediumK}$,
+$\Sexpr{largeK}$, the corresponding compression rates are
+\Sexpr{comprate[tinyK]}, \Sexpr{comprate[smallK]},
+\Sexpr{comprate[mediumK]}, \Sexpr{comprate[largeK]}. These are the
+values from diagnal matrix S.
+
+
+
+\vskip0.25in
+\begin{center}
+    \textbf{Problems from Chapter 4: Multidimensional Scaling}
+\end{center}
+
+\paragraph{Ex 4.1}
+\begin{itemize}
+    \item \verb+[COMMIT]+ Modify the code in Listing \ref{code:examplefrommanual} for
+        illustrating the first ten objects on a ``line''
+\begin{center}
+\begin{minipage}{0.65\textwidth}
+\begin{lstlisting}[caption={TikZ Code for Figure
+    \ref{fig:examplefrommanual}},label={code:examplefrommanual}]
+\begin{tikzpicture}
+  \foreach \x in {1,2,...,5,7,8,...,12}
+    \foreach \y in {1,...,5}
+    {
+      \draw (\x,\y) +(-.5,-.5) rectangle ++(.5,.5);
+      \draw (\x,\y) node{\footnotesize $(\x,\y)$};
+    }
+\end{tikzpicture}
+\end{lstlisting}
+\end{minipage}
+\end{center}
+    \item \verb+[COMMIT]+ list your R/Sweave codes using \verb+lstlisting+
+    \item \verb+[COMMIT]+ use the R/Sweave codes to compute
+    \item \verb+[COMMIT]+ explain your computed numerical values 
+    \item make sure to refer to your R code listing via \verb+\ref+ and to the
+        computed values using \verb+\Sexpr+
+    \item refer to  \cite{tikzManual2012-11-04} if necessary
+\end{itemize}
+
+\begin{figure}[h!]
+    \centering
+\begin{tikzpicture}
+  \foreach \x in {1,2,...,5,7,8,...,12}
+    \foreach \y in {1,...,5}
+    {
+      \draw (\x,\y) +(-.5,-.5) rectangle ++(.5,.5);
+      \draw (\x,\y) node{\footnotesize $(\x,\y)$};
+    }
+\end{tikzpicture}
+\caption{An extension of an example from the TikZ \& PGF manual \cite{tikzManual2012-11-04}}
+\label{fig:examplefrommanual}
+\end{figure}
